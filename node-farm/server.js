@@ -5,6 +5,9 @@ const fs = require('fs');
 const http = require('http');
 const url = require('url');
 
+// importing custom module we created
+const replaceTemplate = require('./modules/replaceTemplate');
+
 // using sync version because we are only calling it once when application is loaded
 const tempOverview = fs.readFileSync(`${__dirname}/templates/overview.html`, 'utf-8');
 const tempCard = fs.readFileSync(`${__dirname}/templates/card.html`, 'utf-8');
@@ -13,27 +16,16 @@ const tempProduct = fs.readFileSync(`${__dirname}/templates/product.html`, 'utf-
 const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, 'utf-8');
 const dataObject = JSON.parse(data);
 
-/**
- * Replace template file variables with product data
- * @param {*} temp 
- * @param {*} product 
- * @returns 
- */
-const replaceTemplate = (temp, product) => {
-  let output = temp.replace(/{%PRODUCTNAME%}/g, product.productName);
-  output = output.replace(/{%IMAGE%}/g, product.image);
-  output = output.replace(/{%NUTRIENTS%}/g, product.nutrients);
-  output = output.replace(/{%FROM%}/g, product.from);
-  output = output.replace(/{%QUANTITY%}/g, product.quantity);
-  output = output.replace(/{%PRICE%}/g, product.price);
-  output = output.replace(/{%DESCRIPTION%}/g, product.description);
-  output = output.replace(/{%ID%}/g, product.id);
+// importing node module we added with npm
+const slugify = require('slugify');
 
-  if (!product.organic) {
-    output = output.replace(/{%NOT_ORGANIC%}/g, 'not-organic');
-  }
-  return output;
-};
+// testing slugify
+const slugs = dataObject.map((el) => {
+  return slugify(el.productName, { lower: true });
+});
+console.log(slugs);
+
+console.log(slugify('FResh Avocados', { lower: true }))
 
 const server = http.createServer((req, res) => {
   // destructure query and pathname from url

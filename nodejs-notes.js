@@ -24,5 +24,11 @@
  * - asynchronous - non-blocking code
  */
 
-
-
+/**
+ * NPM
+ * 
+ * - node package manager
+ * - before dependency version add ~ to only accept patch changes ex. (~1.4.0)
+ * - before dependency version add ^ to accept minor or patch changes ex. (^1.4.0)
+ * - in terminal use -> npm update [package] --save to save version changes to package.json
+ */
